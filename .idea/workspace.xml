@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66a1f872-16d8-4e46-860f-31f9e1244786" name="Changes" comment="init">
+    <list default="true" id="66a1f872-16d8-4e46-860f-31f9e1244786" name="Changes" comment="feat:新增前端工程">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chain/job_chain.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/chain/job_chain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/domain/resume.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/domain/resume.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/infra/llm.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/infra/llm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prompt/match_evaluate.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/prompt/match_evaluate.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prompt/resume_parse.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/prompt/resume_parse.jinja2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/candidate.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/candidate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/recruitment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/recruitment.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -120,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767601739695</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat:新增前端工程">
+      <option name="closed" value="true" />
+      <created>1767669995658</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1767669995658</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,7 +134,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -139,9 +154,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="feat:新增前端工程" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat:新增前端工程" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/hr$main.coverage" NAME="main Coverage Results" MODIFIED="1767669661070" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/hr$main.coverage" NAME="main Coverage Results" MODIFIED="1767670517037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>

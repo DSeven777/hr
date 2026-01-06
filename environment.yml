@@ -1,0 +1,24 @@
+name: ai-recruitment
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults
+dependencies:
+  - python=3.11.14
+  - pip=24.2
+  - pip:
+      - fastapi
+      - uvicorn
+      - sqlalchemy
+      - pymysql==1.1.2
+      - python-multipart==0.0.21
+      - python-dotenv
+      - loguru
+      - pypdf==6.5.0
+      - python-docx==1.2.0
+      - langchain-openai
+      - langchain-core
+      - langchain
+      - pydantic
+      - jinja2
+      - pycryptodome==3.21.0

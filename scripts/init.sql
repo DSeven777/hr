@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     name VARCHAR(255) COMMENT '候选人姓名',
     email VARCHAR(255) COMMENT '邮箱',
     phone VARCHAR(50) COMMENT '电话',
+    years_of_experience FLOAT DEFAULT 0 COMMENT '工作年限',
     summary TEXT COMMENT '个人简介',
     skills JSON COMMENT '技能列表 (JSON Array)',
     education JSON COMMENT '教育经历 (JSON Array)',
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS candidates (
     matched_job_id INT COMMENT '关联的职位ID',
     match_score FLOAT COMMENT '匹配分数 (0-100)',
     match_analysis TEXT COMMENT '匹配分析报告',
+    match_details JSON COMMENT '详细匹配结果 (JSON Object)',
     
     -- 文件信息
     resume_path VARCHAR(512) COMMENT '简历文件路径',

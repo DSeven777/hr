@@ -95,13 +95,15 @@ class RecruitmentService:
             name=resume.name,
             email=resume.email,
             phone=resume.phone,
+            years_of_experience=resume.years_of_experience, # Save to DB
             summary=resume.summary,
             skills=resume.skills,
             education=[e.model_dump(by_alias=True) for e in resume.education],
             work_experience=[w.model_dump(by_alias=True) for w in resume.work_experience],
             matched_job_id=job_id,
             match_score=match_result.overall_score,
-            match_analysis=match_result.summary + "\nRecommendation: " + match_result.recommendation
+            match_analysis=match_result.summary + "\nRecommendation: " + match_result.recommendation,
+            match_details=match_result.model_dump(by_alias=True)
         )
         
         db.add(candidate)
@@ -174,13 +176,15 @@ class RecruitmentService:
                                 name=resume.name,
                                 email=resume.email,
                                 phone=resume.phone,
+                                years_of_experience=resume.years_of_experience, # Save to DB
                                 summary=resume.summary,
                                 skills=resume.skills,
                                 education=[e.model_dump(by_alias=True) for e in resume.education],
                                 work_experience=[w.model_dump(by_alias=True) for w in resume.work_experience],
                                 matched_job_id=job_id,
                                 match_score=match_result.overall_score,
-                                match_analysis=match_result.summary + "\nRecommendation: " + match_result.recommendation
+                                match_analysis=match_result.summary + "\nRecommendation: " + match_result.recommendation,
+                                match_details=match_result.model_dump(by_alias=True) # Save full detailed scoring
                             )
                             db.add(candidate)
                             db.commit()

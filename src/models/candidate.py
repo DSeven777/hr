@@ -9,6 +9,7 @@ class CandidateModel(Base):
     name = Column(String(255), nullable=True)
     email = Column(String(255), nullable=True)
     phone = Column(String(50), nullable=True)
+    years_of_experience = Column(Float, nullable=True) # Added field
     summary = Column(Text, nullable=True)
     skills = Column(JSON, nullable=True)
     education = Column(JSON, nullable=True)
@@ -18,6 +19,7 @@ class CandidateModel(Base):
     matched_job_id = Column(Integer, ForeignKey("jobs.id"), nullable=True)
     match_score = Column(Float, nullable=True)
     match_analysis = Column(Text, nullable=True) # Overall summary/recommendation
+    match_details = Column(JSON, nullable=True) # Store full structured match result (scores per dimension, hard fail reasons)
     
     # Raw file
     resume_path = Column(String(512), nullable=True)
