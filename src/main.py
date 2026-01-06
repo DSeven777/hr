@@ -1,6 +1,8 @@
 import sys
+import json
 from typing import List
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Depends, Request
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
@@ -16,6 +18,7 @@ from src.domain.match import MatchResult
 from src.config import Config
 from src.infra.database import get_db, init_db
 from src.models.job import JobModel
+from src.models.candidate import CandidateModel
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -155,9 +158,13 @@ def parse_job(req: TextRequest):
     """
     try:
         logger.info("Received JD parse request")
-        return service.parse_job(req.text)
+        logger.info(f"JD text: {req.text[:100]}...") # Log first 100 chars
+        result = service.parse_job(req.text)
+        logger.info(f"JD parsed result: {result}")
+        return result
     except Exception as e:
         logger.error(f"Error parsing JD: {str(e)}")
+        logger.exception("Full traceback:") # Log full stack trace
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/match", response_model=MatchResult, summary="Match Resume with JD")
@@ -193,6 +200,21 @@ def create_job(job: JobDescription, db: Session = Depends(get_db)):
         logger.error(f"Error creating job: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/v1/jobs", summary="List Jobs")
+def get_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """List all jobs."""
+    jobs = db.query(JobModel).offset(skip).limit(limit).all()
+    return jobs
+
+@app.get("/api/v1/candidates", summary="List Candidates")
+def get_candidates(skip: int = 0, limit: int = 100, job_id: int = None, db: Session = Depends(get_db)):
+    """List all candidates, optionally filtered by job_id."""
+    query = db.query(CandidateModel)
+    if job_id:
+        query = query.filter(CandidateModel.matched_job_id == job_id)
+    candidates = query.offset(skip).limit(limit).all()
+    return candidates
+
 @app.post("/api/v1/application/submit", summary="Upload PDF Resume & Match")
 async def submit_application(
     job_id: int = Form(...),
@@ -223,6 +245,7 @@ async def batch_submit_application(
 ):
     """
     Batch Upload multiple PDF resumes, parse them, match against the specified Job ID, and save to DB.
+    Returns a streaming response (NDJSON).
     """
     try:
         # Validate files
@@ -235,9 +258,36 @@ async def batch_submit_application(
             
         if not valid_files:
              raise HTTPException(status_code=400, detail="No valid PDF files provided")
+             
+        # Fetch Job (Do this synchronously before streaming starts)
+        job_record = db.query(JobModel).filter(JobModel.id == job_id).first()
+        if not job_record:
+            raise HTTPException(status_code=404, detail=f"Job with ID {job_id} not found")
+        
+        # Prepare Job Domain Object
+        job_domain = JobDescription(
+            **{
+                "Job Title": job_record.title,
+                "Department": job_record.department,
+                "Required Skills": job_record.required_skills or [],
+                "Nice to have Skills": job_record.nice_to_have_skills or [],
+                "Required Experience Years": job_record.required_experience_years,
+                "Degree Requirement": job_record.degree_requirement or "Not Specified",
+                "Responsibilities": job_record.responsibilities or ""
+            }
+        )
+        
+        # User requested to disable streaming.
+        # So we collect all results and return a standard JSON response.
+        
+        results = []
+        async for result in service.process_batch_applications(valid_files, job_domain, job_id):
+            results.append(result)
+            
+        return results
 
-        result = await service.process_batch_applications(db, valid_files, job_id)
-        return result
+    except HTTPException:
+        raise
     except ValueError as ve:
         raise HTTPException(status_code=404, detail=str(ve))
     except Exception as e:

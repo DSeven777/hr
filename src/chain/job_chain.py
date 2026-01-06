@@ -1,5 +1,6 @@
 from pathlib import Path
 from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import PydanticOutputParser
 from src.infra.llm import OpenAIProvider
 from src.domain.job import JobDescription
 
@@ -8,18 +9,25 @@ class JobAnalysisChain:
     
     def __init__(self):
         self.llm = OpenAIProvider().get_model()
-        template_path = Path(__file__).parents[1] / "prompt" / "job_analysis.jinja2"
+        self.parser = PydanticOutputParser(pydantic_object=JobDescription)
         
+        template_path = Path(__file__).parents[1] / "prompt" / "job_analysis.jinja2"
         template_content = template_path.read_text(encoding="utf-8")
         
+        # Inject format instructions into the prompt
         self.prompt = PromptTemplate(
-            template=template_content,
+            template=template_content + "\n\n{{format_instructions}}",
             input_variables=["jd_text"],
+            partial_variables={"format_instructions": self.parser.get_format_instructions()},
             template_format="jinja2"
         )
         
     def analyze(self, jd_text: str) -> JobDescription:
         """Analyze JD text."""
-        structured_llm = self.llm.with_structured_output(JobDescription, method="json_mode")
-        chain = self.prompt | structured_llm
-        return chain.invoke({"jd_text": jd_text})
+        try:
+            chain = self.prompt | self.llm | self.parser
+            res = chain.invoke({"jd_text": jd_text})
+            return res
+        except Exception as e:
+            # Fallback or re-raise
+            raise ValueError(f"Failed to parse job description: {e}")

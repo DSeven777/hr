@@ -17,7 +17,7 @@ class Config:
     VECTOR_STORE_PATH = Path(os.getenv("VECTOR_STORE_PATH", "./data/vectorstore"))
     
     # Database Settings
-    DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:123456@localhost:3306/hr_recruitment")
+    DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:xwj236..@localhost:3306/hr_recruitment")
 
     # App Settings
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

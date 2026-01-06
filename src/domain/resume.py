@@ -16,9 +16,9 @@ class WorkExperience(BaseModel):
     
     company: Optional[str] = Field(None, description="Company name", alias="Company")
     role: Optional[str] = Field(None, description="Job title", alias="Role")
-    dates: Optional[str] = Field(None, description="Time period", alias="Dates")
-    start_date: Optional[str] = None
-    end_date: Optional[str] = None
+    dates: Optional[str] = Field(None, description="Original time period string (e.g. '2020.01-2021.01')", alias="Dates")
+    start_date: Optional[str] = Field(None, description="Start date in YYYY-MM format", alias="Start Date")
+    end_date: Optional[str] = Field(None, description="End date in YYYY-MM format (use 'Present' for current)", alias="End Date")
     description: Optional[str] = Field(None, description="Details of responsibilities and achievements", alias="Description")
 
 class Resume(BaseModel):
